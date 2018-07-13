@@ -1,0 +1,18 @@
+{% extends "base.html"%}
+{%block content%}
+
+<div >
+<form class="form-inline" method='POST' action="{% if action_url %}{{ action_url }}{% endif %}">
+ <label class="my-1 mr-2" for="inlineFormCustomSelectPref"> {%csrf_token%}
+	{{form.as_p}}</label>
+
+ 
+
+  	
+</form>
+ <input class='btn btn-primary' type="submit" value="{{ btn_title }}"/>
+</div>
+{%endblock%}
+
+
+

@@ -1,0 +1,41 @@
+{% extends "base.html"%}
+{%block content%}
+<div class="row">
+	<div class="col-sm-8 offset-sm-2">
+		
+		<a href="{%url 'tweet:create'%}">Create Tweet</a>
+		<hr>
+		
+	{% for obj in object_list%}	
+
+
+<div class="media">
+		{% if object.image %}
+  <img class="mr-3" src="..." alt="Generic placeholder image">
+  {%endif%}
+  <div class="media-body">
+    <h5 class="mt-0">{{obj.id}}</h5>
+    
+		<p>{{obj.user}}</p>
+		<p><small><a href="{{ obj.get_absolute_url }}"></a>{{obj.created |timesince}} ago</small></p>
+		<p>{{obj.content}}</p>
+		<br>
+			 <a href="{{obj.get_absolute_url}}">View</a> 
+		
+		<hr>
+		{% empty %}
+		{% if request.GET.query %}
+		<li>Sorry, no tweets found matching the input.</li>
+		{% else %}
+		<li>Sorry, no tweets yet.</li>
+  </div>
+
+</div>
+
+		
+		{%endif%}
+		{%endfor%}
+	</div>
+</div>
+
+{%endblock%}

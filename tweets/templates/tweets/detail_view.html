@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+{%block content%}
+<div class="row">
+	<div class="col-sm-8 offset-sm-2">
+		<p>{{object.user}}</p><p>{{object.created|timesince}}</p>
+		<h1>{{object.content}}</h1>
+		<hr>
+
+	</div>
+</div>
+{%endblock%}
+
