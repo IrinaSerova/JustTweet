@@ -1,9 +1,9 @@
 {% extends "base.html"%}
 {%block content%}
-
+{% load crispy_forms_tags %}
 <div >
 <form class="form-inline" method='POST' action="{% if action_url %}{{ action_url }}{% endif %}">
- <label class="my-1 mr-2" for="inlineFormCustomSelectPref"> {%csrf_token%}
+ <label class="my-1 mr-2" for="inlineFormCustomSelectPref"> {%csrf_token%}     {{ form|crispy }}
 	{{form.as_p}}</label>
 
  
