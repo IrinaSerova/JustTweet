@@ -1,8 +1,10 @@
 {% load crispy_forms_tags %}
-<form class='form-inline' method='POST' action="{%if action_url %}{{action_url}}{%endif%}">
+<form  method='POST' action="{%if action_url %}{{action_url}}{%endif%}">
 	{%csrf_token%}
 	{{form|crispy}}
-	<input type="submit" class="btn btn-primary float-right" value="{{btn_title}}"/>
+	<br>
+	<input type="submit" class="btn btn-sm btn-outline-secondary" value="{{btn_title}}"/>
+
 </form>
 
 
