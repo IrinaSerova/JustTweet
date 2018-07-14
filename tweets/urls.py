@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.generic.base import RedirectView
 
 from .views import (
 	TweetListView, 
@@ -8,7 +9,7 @@ from .views import (
 	TweetDeleteView)
 
 urlpatterns = [
-    url(r'^$', TweetListView.as_view(), name='list'), # localhost:4000/tweet/
+    url(r'^$', TweetListView.as_view(), name="list"), # localhost:4000/tweet/
     url(r'^create/$', TweetCreateView.as_view(), name='create'),
     url(r'^(?P<pk>\d+)/update/$', TweetUpdateView.as_view(), name='update'),
     url(r'^(?P<pk>\d+)/delete/$', TweetDeleteView.as_view(), name='delete'),

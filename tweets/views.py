@@ -18,9 +18,10 @@ class TweetListView(ListView):
 	template_name = "tweets/list_view.html"
 	# queryset = Tweet.objects.all()
 
-	def get_context_data(self, **kwargs):
-		context = super(TweetListView, self).get_context_data(**kwargs)
-		print(context)
+	def get_context_data(self, *args, **kwargs):
+		context = super(TweetListView, self).get_context_data(*args, **kwargs)
+		context['create_form'] = TweetForm
+		context['create_url'] = reverse_lazy("tweet:create")
 		return context
 
 	def get_queryset(self, *args, **kwargs):
@@ -40,7 +41,7 @@ class TweetDetailView(DetailView):
 	queryset = Tweet.objects.all()
 
 	def get_context_data(self, **kwargs):
-		context = super(DetailView, self).get_context_data(**kwargs)
+		context = super().get_context_data(**kwargs)
 		print(context)
 		return context
 
