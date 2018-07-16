@@ -23,6 +23,17 @@ class TweetModelTestCase(TestCase):
         absolute_url = reverse("tweet:detail", kwargs={"pk": 1})
         self.assertEqual(obj.get_absolute_url(), absolute_url)
 
+    # def test_update_tweet(self):
+    #     obj2 = Tweet.objects.create(user=User.objects.first(),content='hello there!')
+
+    #     response = self.client.post(
+    #         reverse('tweet:update', kwargs={'pk': obj2.id}), 
+    #         {'user': User.objects.first(), 'content': 'updated content'})
+
+    #     # self.assertEqual(response.status_code, 302)
+    #     self.assertTrue(obj2.content does not equal obj2.content)
+    #     self.assertEqual(obj2.content, 'updated content')
+
     def test_tweet_url(self):
         obj = Tweet.objects.create(
                 user= User.objects.first(),
