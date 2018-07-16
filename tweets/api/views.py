@@ -1,20 +1,32 @@
-from django.conf.urls import url
+from tweets.model import Tweet
+from .serializers import ModelTweetSerializer
+from rest_framework import generics
 
-from django.views.generic.base import RedirectView
+class TweetListAPIView(generics.ListAPIView):
+    serializer_class = TweetModelSerializer
+    pagination_class = StandardResultsPagination
 
-from .views import (
-    # LikeToggleAPIView,
-    # RetweetAPIView,
-    # TweetCreateAPIView,
-    # TweetListAPIView,
-    # TweetDetailAPIView,
+    def get_serializer_context(self, *args, **kwargs):
+        context = super(TweetListAPIView, self).get_serializer_context(*args, **kwargs)
+        context['request'] = self.request
+        return context
 
-    )
+    def get_queryset(self, *args, **kwargs):
+        requested_user = self.kwargs.get("username")
+        
+        if requested_user:
+            qs = Tweet.objects.filter(user__username=requested_user).order_by("-timestamp")
+        else:
+            im_following = self.request.user.profile.get_following() # none
+            qs1 = Tweet.objects.filter(user__in=im_following)
+            qs2 = Tweet.objects.filter(user=self.request.user)
+            qs = (qs1 | qs2).distinct().order_by("-timestamp")
+        
+        query = self.request.GET.get("q", None)
+        if query is not None:
+            qs = qs.filter(
+                    Q(content__icontains=query) |
+                    Q(user__username__icontains=query)
+                    )
+        return qs
 
-urlpatterns = [
-    url(r'^$', TweetListAPIView.as_view(), name='list'),
-    # url(r'^create/$', TweetCreateAPIView.as_view(), name='create'),
-    # url(r'^(?P<pk>\d+)/$', TweetDetailAPIView.as_view(), name='detail'),
-    # url(r'^(?P<pk>\d+)/like/$', LikeToggleAPIView.as_view(), name='like-toggle'),
-    # url(r'^(?P<pk>\d+)/retweet/$', RetweetAPIView.as_view(), name='retweet'), 
-]
