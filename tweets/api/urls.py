@@ -4,12 +4,7 @@ from django.views.generic.base import RedirectView
 
 from .views import (
     TweetListAPIView,
-    
-    # LikeToggleAPIView,
-    # RetweetAPIView,
-    # TweetCreateAPIView,
-    
-    # TweetDetailAPIView,
+  
 
     )
 
