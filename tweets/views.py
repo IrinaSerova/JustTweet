@@ -32,8 +32,7 @@ class TweetListView(ListView):
 		if query is not None:
 			qs = qs.filter(Q(content__icontains = query) 
 				| Q(user__username__icontains=query))
-		# content_query = self.request.GET.get('query')
-		# new_context = Tweet.objects.filter(Q(content__icontains = content_query) | Q(user__startswith= self.request.user))       
+      
 		return qs
 
 class TweetDetailView(DetailView):
