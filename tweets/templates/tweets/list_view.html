@@ -4,11 +4,12 @@
 <script>
 $(document).ready(function(){
 	// console.log("ready");
-	$.ajax({
-		url: "tweet/api",
-		method: "GET",
-		success: function(data){
-			$.each(data, function(key, value){
+	var query = getParameterByName('query');
+	var tweetList = []
+	function parseTwif(len(tweetList) == 0{
+		if $("#tweet-container").text("No tweets")
+	}else {
+				$.each(data, function(key, value){
 				var TweetKey = key;
 				var tweetContent = value.content;
 				var tweetuser = value.user;
@@ -18,8 +19,23 @@ $(document).ready(function(){
 					)
 			})
 		
-		// error: function(data) {
-		// console.log("error");
+		}
+	}
+	
+
+	$.ajax({
+		url: "tweet/api",
+		data: {
+			'query: query'
+		}
+		method: "GET",
+		success: function(data){
+			tweetList = data;
+			parseTweets()
+
+			
+			})
+	
 	}
 		
 	})
