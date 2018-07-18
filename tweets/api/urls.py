@@ -10,5 +10,6 @@ from .views import (
 
 urlpatterns = [
     url(r'^$', TweetListAPIView.as_view(), name='list'), 
+    url(r'^create/$', TweetCreateAPIView.as_view(), name='create'), 
 
 ]
