@@ -12,6 +12,7 @@ class ModelTweetSerializer(serializers.ModelSerializer):
 		'id',
 		'user',
 		'content',
+		'updated',
 
 		]
 

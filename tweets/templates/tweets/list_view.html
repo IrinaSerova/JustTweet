@@ -3,17 +3,24 @@
 {% block script %}
 <script>
 $(document).ready(function(){
-	console.log("ready");
+	// console.log("ready");
 	$.ajax({
 		url: "tweet/api",
-		method: GET,
+		method: "GET",
 		success: function(data){
 			$.each(data, function(key, value){
 				var TweetKey = key;
 				var tweetContent = value.content;
 				var tweetuser = value.user;
+				var time = value.updated;
+				$("#tweet-container").append(
+					"<div class='media'><div class='media-body'>" + tweetContent + "<br>" + "via" + "<h5>" +tweetuser.username + "</h5>" + " | " + "<a href='#'>View</>a>" + time + "</div></div><hr/>"
+					)
 			})
-		} 
+		
+		// error: function(data) {
+		// console.log("error");
+	}
 		
 	})
   
@@ -29,6 +36,13 @@ $(document).ready(function(){
 		</div>
 		{%endif%}
 		<hr>
+		<div id="tweet-container">
+			
+		</div>
+
+
+
+
 		{% for obj in object_list%}
 		<div class="media">
 			{% if obj.image %}
