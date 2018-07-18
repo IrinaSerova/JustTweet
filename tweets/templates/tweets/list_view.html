@@ -1,5 +1,26 @@
 {% extends "base.html"%}
 {%block content%}
+{% block script %}
+<script>
+$(document).ready(function(){
+	console.log("ready");
+	$.ajax({
+		url: "tweet/api",
+		method: GET,
+		success: function(data){
+			$.each(data, function(key, value){
+				var TweetKey = key;
+				var tweetContent = value.content;
+				var tweetuser = value.user;
+			})
+		} 
+		
+	})
+  
+});
+</script>
+{% endblock script %}
+
 <div class="row">
 	<div class="col-sm-8 offset-sm-2">
 		{% if not request.GET.query%}
