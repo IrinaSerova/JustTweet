@@ -42,7 +42,7 @@
 				},
 				method: "GET",
 				success: function(data){
-					tweetList = data;
+					tweetList = data.relusts;
 					parseTweets()
 
 				},
@@ -54,24 +54,26 @@
 		}
 		fetchTweets();
 
-		$("#tweet_form").submit(function(event){
-			event.preventDefault();
-			var formData = $(this).serialize();
-			$.ajax({
-				url: "/tweet/api/create/",
-				data: formData,
-				method: "POST",
-				success: function(data){
-					console.log(data)
-					fetchTweets()
+		// $("#tweet_form").submit(function(event){
+		// 	event.preventDefault();
+			
+		// 	var formData = $(this).serialize(); 
 
-				},
-				error: function(data){
-					console.log("error");
-					console.log(data.status);
-				}
-			})
-		})
+		// 	$.ajax({
+		// 		url: "/tweet/api/create/",
+		// 		data: formData,
+		// 		method: "POST",
+		// 		success: function(data){
+		// 			console.log(data)
+		// 			fetchTweets()
+
+		// 		},
+		// 		error: function(data){
+		// 			console.log("error");
+		// 			console.log(data.status);
+		// 		}
+		// 	})
+		// })
 	});
 </script>
 {% endblock script%}
