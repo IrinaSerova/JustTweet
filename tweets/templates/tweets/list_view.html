@@ -2,139 +2,78 @@
 {%block content%}
 {% block script %}
 <script>
-$(document).ready(function(){
-	// console.log("ready");
-	function getParameterByName(name, url) {
-   if (!url) {
-     url = window.location.href;
-   }
-   name = name.replace(/[\[\]]/g, "\\$&");
-   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-       results = regex.exec(url);
-   if (!results) return null;
-   if (!results[2]) return '';
-   return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-	var query = getParameterByName('query');
-	var tweetList = []
-	// function parseTweets(len(tweetList) == 0{
-	// 	if $("#tweet-container").text("No tweets")
-	// }else {
-	// 			$.each(data, function(key, value){
-	// 			var TweetKey = key;
-	// 			var tweetContent = value.content;
-	// 			var tweetuser = value.user;
-	// 			var time = value.updated;
-	// 			$("#tweet-container").append(
-	// 				"<div class='media'><div class='media-body'>" + tweetContent + "<br>" + "via" + "<h5>" + tweetuser.username + "</h5>" + " | " + "<a href='#'>View</>a>" + time + "</div></div><hr/>"
-	// 				)
-	// 		})
-		
-	// 	}
-	// }
-	function parseTweets(){
-   if (tweetList == 0) {
-     tweetContainer.text("No tweets currently found.")
-   } else {
-   	$.each(data, function(key, value){
-				var TweetKey = key;
-				var tweetContent = value.content;
-				var tweetuser = value.user;
-				var time = value.updated;
-				$("#tweet-container").append(
-					"<div class='media'><div class='media-body'>" + tweetContent + "<br>" + "via" + "<h5>" + tweetuser.username + "</h5>" + " | " + "<a href='#'>View</>a>" + time + "</div></div><hr/>"
-					)
-			})
-
-
-
-   }
- }
- function fetchTweets(url){
-   console.log('fetching Tweets')
-   var fecthUrl;
-   if (!url) {
-     fecthUrl = initialURL
-   } else {
-     fecthUrl = url
-   }
-   $.ajax({
-     url: fecthUrl,
-     data: {
-       "q": query
-     },
-     method: "GET",
-     success: function(data){
-       // console.log(data)
-       tweetList = data.results
-       if (data.next){
-         nextTweetUrl = data.next
-       } else {
-         $("#loadmore").css("display", "none")
-       }
-       parseTweets()
-       updateHashLinks()
-
-     },
-     error: function(data){
-       console.log("error")
-       console.log(data)
-     }
-   })
- }
-
-	$.ajax({
-		url: "tweet/api",
-		data: {
-			'query': query
+	function getParameterByName(name, url){
+		if (!url) {
+			url = window.location.href;
 		}
-		method: "GET",
-		success: function(data){
-			tweetList = data;
-			parseTweets()
+		name = name.replace(/[\[\]]/g, "\\$&");
+		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
 
-				
-	
-	},
-	error: function(data){
-       console.log("error");
-       // console.log(data)
-     }
-		
-	})
+	$(document).ready(function(){
+		console.log("it's ready.");
+		var query = getParameterByName('query');
+		var tweetList = []
 
- fetchTweets();
- $("#tweet_form").submit(function(event){
- 	event.preventDefault();
- 	$.ajax({
-     url: fecthUrl,
-     data: {
-       "q": query
-     },
-     // method: "GET",
-     method: "POST",
-     success: function(data){
-       // console.log(data)
-       tweetList = data.results
-       if (data.next){
-         nextTweetUrl = data.next
-       } else {
-         $("#loadmore").css("display", "none")
-       }
-       parseTweets()
-       updateHashLinks()
+		function parseTweets(){
+			if(tweetList.length == 0){
+				$("#tweet-container").text("No tweets currently found.")
+			}else{
+				$.each(tweetList, function(key, value){
+					var tweetKey = key;
+					var tweetContent = value.content;
+					var tweetuser = value.user;
+					var time = value.updated;
+					console.log(value);
+					$("#tweet-container").prepend("<div class='media'><div class='media-body'>" + "<h5>" + tweetuser.username + "</h5>" + tweetContent + "<br>" + "<a href='#'>View</a>" + " | " + time + "<hr>")
+				})
+			}
+		}
 
-     },
-     error: function(data){
-       console.log("error")
-       console.log(data.status)
-     }
-   })
+		function fetchTweets(){
+			console.log("fetching tweets...")
+			$.ajax({
+				url: "/tweet/api/",
+				data: {
+					'query': query
+				},
+				method: "GET",
+				success: function(data){
+					tweetList = data;
+					parseTweets()
 
- })
-});
+				},
+				error: function(data){
+					console.log("error");
+					// console.log("data");
+				}
+			})
+		}
+		fetchTweets();
 
+		$("#tweet_form").submit(function(event){
+			event.preventDefault();
+			var formData = $(this).serialize();
+			$.ajax({
+				url: "/tweet/api/create/",
+				data: formData,
+				method: "POST",
+				success: function(data){
+					console.log(data)
+					fetchTweets()
+
+				},
+				error: function(data){
+					console.log("error");
+					console.log(data.status);
+				}
+			})
+		})
+	});
 </script>
 {% endblock script %}
 
