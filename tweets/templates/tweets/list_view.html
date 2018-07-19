@@ -1,5 +1,4 @@
-{% extends "base.html"%}
-{%block content%}
+{% extends "base.html"%} 
 {% block script %}
 <script>
 	function getParameterByName(name, url){
@@ -75,28 +74,30 @@
 		})
 	});
 </script>
-{% endblock script %}
+{% endblock script%}
 
+{%block content%}
 <div class="row">
 	<div class="col-sm-8 offset-sm-2">
 		{% if not request.GET.query%}
 		<div>
-	
-			{% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' form_class='tweet-form' %}
+			{% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' form_id='tweet_form'%}
 		</div>
+		<br>
+		<br>
 		{%endif%}
 		<hr>
+
 		<div id="tweet-container">
-			
+
 		</div>
 
-
-
+		<br><br>	
 
 		{% for obj in object_list%}
 		<div class="media">
 			{% if obj.image %}
-				<img class="mr-3" src="..." alt="Generic placeholder image">
+			<img class="mr-3" src="..." alt="Generic placeholder image">
 			{%endif%}
 			<div class="media-body">
 				<h5 class="mt-0">{{obj.user}}</h5>
@@ -110,12 +111,9 @@
 				<li>Sorry, no tweets yet.</li>
 				{%endif%}
 			</div>
-			
-		
+		</div>
 		{%endfor%}
 	</div>
-	
 </div>
-
 {%endblock%}
 

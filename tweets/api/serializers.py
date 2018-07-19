@@ -18,8 +18,3 @@ class ModelTweetSerializer(serializers.ModelSerializer):
 
 	def get_timesince(self, obj):
 		return timesince(obj.created) + " ago"
-
-
-
-
-    
