@@ -7,7 +7,8 @@ class TweetListAPIView(generics.ListAPIView):
 	serializer_class = ModelTweetSerializer
 	
 	def get_queryset(self, *args, **kwargs):
-		qs = Tweet.objects.all().order_by("-created")
+		qs = Tweet.objects.all()
+		# .order_by("-created")
 		print(self.request.GET)
 		query = self.request.GET.get('query', None)
 		if query is not None:
