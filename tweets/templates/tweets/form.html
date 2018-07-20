@@ -2,7 +2,7 @@
 <form {%if form_id %} id='{{form_id}}' {%endif%} action="{%if action_url %}{{action_url}}{%endif%}">
 	{%csrf_token%}
 	{{form|crispy}}
-	<input type="submit" class="btn btn-primary float-right mt-3" value="{{btn_title}}"/>
+	<input type="submit" class="btn btn-primary  mt-3" value="{{btn_title}}"/>
 </form>
 
 

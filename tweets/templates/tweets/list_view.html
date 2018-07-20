@@ -16,19 +16,28 @@
 	$(document).ready(function(){
 		console.log("it's ready.");
 		var query = getParameterByName('query');
-		var tweetList = []
+		var tweetList = [];
+
+		function attachTweet(value, prepend){
+			var tweetContent = value.content;
+			var tweetuser = value.user;
+			var time = value.date_display;
+			var formattedHtml = "<div class='media'><div class='media-body'>" + "<h5>" + tweetuser.username + "</h5>" + tweetContent + "<br>" + "<a href='#'>View</a>" + " | " + time + "<hr>"
+			if(prepend == true){
+				$("#tweet-container").prepend(formattedHtml);
+			}
+			else{
+				$("#tweet-container").append(formattedHtml);
+			}
+		}
 
 		function parseTweets(){
 			if(tweetList.length == 0){
 				$("#tweet-container").text("No tweets currently found.")
 			}else{
 				$.each(tweetList, function(key, value){
-					var tweetKey = key;
-					var tweetContent = value.content;
-					var tweetuser = value.user;
-					var time = value.updated;
-					console.log(value);
-					$("#tweet-container").prepend("<div class='media'><div class='media-body'>" + "<h5>" + tweetuser.username + "</h5>" + tweetContent + "<br>" + "<a href='#'>View</a>" + " | " + time + "<hr>")
+					var tweetkey = key;
+					attachTweet(value);
 				})
 			}
 		}
@@ -42,9 +51,9 @@
 				},
 				method: "GET",
 				success: function(data){
-					tweetList = data.results; // ERROR .relult
+					// $("#tweet-container").text("");
+					tweetList = data;
 					parseTweets()
-
 				},
 				error: function(data){
 					console.log("error");
@@ -52,70 +61,77 @@
 				}
 			})
 		}
+
 		fetchTweets();
+		var charsStart = 280;
+		var charsCurrent = 0;
 
-		// $("#tweet_form").submit(function(event){
-		// 	event.preventDefault();
-			
-		// 	var formData = $(this).serialize(); 
+		$('#tweet_form').append("<span id='tweetCharsNum'>" + charsStart + "</span>");
 
-		// 	$.ajax({
-		// 		url: "/tweet/api/create/",
-		// 		data: formData,
-		// 		method: "POST",
-		// 		success: function(data){
-		// 			console.log(data)
-		// 			fetchTweets()
+		$('#tweet_form textarea').keyup(function(event){
+			var tweetValue = $(this).val();
+			charsCurrent = charsStart - tweetValue.length
+			var spanChars = $('#tweetCharsNum')
+			spanChars.text(charsCurrent);
 
-		// 		},
-		// 		error: function(data){
-		// 			console.log("error");
-		// 			console.log(data.status);
-		// 		}
-		// 	})
-		// })
+			if(charsCurrent > 0){
+				spanChars.removeClass("red");
+				spanChars.removeClass("grey");
+			}
+			else if( charsCurrent == 0){
+				spanChars.removeClass("red");
+				spanChars.addClass("grey");
+			}
+			else{
+				spanChars.addClass("red");
+				spanChars.removeClass("grey");
+			}
+		})
+
+		$("#tweet_form").submit(function(event){
+			event.preventDefault();
+			var formData = $(this).serialize();
+			var thisVar = $(this);
+			console.log(charsCurrent);
+			if(charsCurrent >= 0){
+				$.ajax({
+					url: "/tweet/api/create/",
+					data: formData,
+					method: "POST",
+					success: function(data){
+						thisVar.find("input[type=text], textarea").val("");
+						attachTweet(data, true);
+					// fetchTweets();
+					},
+					error: function(data){
+						console.log("error");
+						console.log(data);
+						console.log(data.status);
+						console.log(data.statusText);
+					}
+				})
+			}
+		})
 	});
 </script>
 {% endblock script%}
 
 {%block content%}
 <div class="row">
-	<div class="col-sm-8 offset-sm-2">
+	<div class="col-sm-3 col-xs-12" style="background-color:skyblue; max-height:70px;">
+		<h1>{{request.user}}</h1>
+	</div>
+	<div class="col-sm-9">
 		{% if not request.GET.query%}
 		<div>
 			{% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' form_id='tweet_form'%}
 		</div>
 		<br>
-		<br>
-		{%endif%}
 		<hr>
-
+		{%endif%}
 		<div id="tweet-container">
 
 		</div>
-
-		<br><br>	
-
-		{% for obj in object_list%}
-		<div class="media">
-			{% if obj.image %}
-			<img class="mr-3" src="..." alt="Generic placeholder image">
-			{%endif%}
-			<div class="media-body">
-				<h5 class="mt-0">{{obj.user}}</h5>
-				<p>{{obj.content}}</p>
-				<p><small><a href="{{obj.get_absolute_url}}">View</a> | {{obj.created | timesince}} ago</small></p>
-				<hr>
-				{% empty %}
-				{% if request.GET.query %}
-				<li>Sorry, no tweets found matching the input.</li>
-				{% else %}
-				<li>Sorry, no tweets yet.</li>
-				{%endif%}
-			</div>
-		</div>
-		{%endfor%}
 	</div>
 </div>
 {%endblock%}
-
