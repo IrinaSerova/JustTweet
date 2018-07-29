@@ -19,10 +19,12 @@ from django.conf.urls import url, include
 
 from .views import home
 from tweets.views import TweetListView
+from accounts.views import UserRegisterView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', TweetListView.as_view(), name='home'),
     url(r'^tweet/', include(('tweets.urls', 'tweet'), namespace='tweet')),
     url(r'^tweet/api/', include(('tweets.api.urls', 'tweet-api'), namespace='tweet-api')),
+    url(r'^register/$', UserRegisterView.as_view(), name='register'),
 ]
